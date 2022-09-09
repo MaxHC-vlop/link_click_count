@@ -1,7 +1,7 @@
 import os
 import json
 
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
 
@@ -25,7 +25,7 @@ def shorten_link(token, user_input):
     response = requests.post(url, headers=headers, json=payload)
     response.raise_for_status()
 
-    return response.json()
+    return response.json()['link']
 
 
 def count_clicks(token, link):
@@ -36,9 +36,6 @@ def count_clicks(token, link):
         'Authorization': token,
         'bitlink': link,
     }
-    # payload = {
-    #     'bitlink': link,
-    # }
 
     response = requests.get(url, headers=headers)
     response.raise_for_status()
@@ -47,19 +44,39 @@ def count_clicks(token, link):
     return clicks_count['total_clicks']
 
 
+def is_bitlink(token, url):
+    link = urlparse(url)
+    butly_prefix = f'/v4/bitlinks/{link.path}'
+    url = urljoin(URL_TEMPLATE, butly_prefix)
+
+    headers = {
+        'Authorization': token,
+    }
+
+    response = requests.get(url, headers=headers)
+
+    return response.ok
+
+
 def main():
     user_input = input()
-
     load_dotenv()
     token = os.getenv('TOKEN')
     try:
-        link = shorten_link(token, user_input)['id']
-        print(link)
-        count = count_clicks(token, link)
-        print(count)
+        response_status = is_bitlink(token, user_input)
+
+        if response_status:
+            return count_clicks(token, user_input)
+
+        else:
+            return shorten_link(token, user_input)
+
     except requests.exceptions.HTTPError as errh:
         exit("Can't get data from server:\n{0}".format(errh))
 
+    except requests.exceptions.ConnectionError as errc:
+        exit('Failed to connect to server:\n{0}'.format(errh))
+
 
 if __name__ == '__main__':
-    main()
+    print(main())
