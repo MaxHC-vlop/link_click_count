@@ -33,8 +33,10 @@ def main():
 
     load_dotenv()
     token = os.getenv('TOKEN')
-
-    print('Битлинк', shorten_link(token, user_input)['link'])
+    try:
+        shorten_link(token, user_input)['link']
+    except requests.exceptions.HTTPError as errh:
+        exit("Can't get data from server:\n{0}".format(errh))
 
 
 if __name__ == '__main__':
