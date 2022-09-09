@@ -28,13 +28,35 @@ def shorten_link(token, user_input):
     return response.json()
 
 
+def count_clicks(token, link):
+    butly_prefix = 'v4/bitlinks/{0}/clicks/summary'
+    url = urljoin(URL_TEMPLATE, butly_prefix.format(link))
+
+    headers = {
+        'Authorization': token,
+        'bitlink': link,
+    }
+    # payload = {
+    #     'bitlink': link,
+    # }
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    clicks_count = response.json()
+
+    return clicks_count['total_clicks']
+
+
 def main():
     user_input = input()
 
     load_dotenv()
     token = os.getenv('TOKEN')
     try:
-        shorten_link(token, user_input)['link']
+        link = shorten_link(token, user_input)['id']
+        print(link)
+        count = count_clicks(token, link)
+        print(count)
     except requests.exceptions.HTTPError as errh:
         exit("Can't get data from server:\n{0}".format(errh))
 
