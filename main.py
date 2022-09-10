@@ -59,9 +59,9 @@ def is_bitlink(token, url):
 
 
 def main():
-    user_input = input()
+    user_input = input('Enter link: ')
     load_dotenv()
-    token = os.getenv('TOKEN')
+    token = os.getenv('API_TOKEN')
     try:
         response_status = is_bitlink(token, user_input)
 
