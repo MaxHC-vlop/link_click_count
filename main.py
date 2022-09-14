@@ -70,7 +70,7 @@ def main():
         exit("Can't get data from server:\n{0}".format(errh))
 
     except requests.exceptions.ConnectionError as errc:
-        exit('Failed to connect to server:\n{0}'.format(errh))
+        exit('Failed to connect to server:\n{0}'.format(errc))
 
 
 if __name__ == '__main__':
