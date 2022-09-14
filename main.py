@@ -11,7 +11,6 @@ URL_TEMPLATE = 'https://api-ssl.bitly.com/v4/bitlinks/'
 
 
 def shorten_link(token, user_input):
-
     headers = {
         'Authorization': token,
     }
@@ -29,6 +28,7 @@ def count_clicks(token, user_input):
     link = urlparse(user_input)
     url_prefix = f'bit.ly/{link.path}/clicks/summary/'
     url = urljoin(URL_TEMPLATE, url_prefix)
+
     headers = {
         'Authorization': token,
         'bitlink': f'bit.ly/{link.path}',
@@ -45,6 +45,7 @@ def is_bitlink(token, url):
     link = urlparse(url)
     url_prefix = f'bit.ly/{link.path}'
     url = urljoin(URL_TEMPLATE, url_prefix)
+
     headers = {
         'Authorization': token,
     }
@@ -56,8 +57,10 @@ def is_bitlink(token, url):
 
 def main():
     user_input = input('Enter link: ')
+
     load_dotenv()
     token = os.environ.get('BITLY_TOKEN')
+    
     try:
         response_status = is_bitlink(token, user_input)
         if response_status:
