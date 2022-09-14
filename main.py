@@ -1,19 +1,16 @@
 import os
-import json
 
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urlsplit
 
 import requests
 
 from dotenv import load_dotenv
 
 
-URL_TEMPLATE = 'https://api-ssl.bitly.com'
+URL_TEMPLATE = 'https://api-ssl.bitly.com/v4/bitlinks/'
 
 
 def shorten_link(token, user_input):
-    butly_prefix = '/v4/bitlinks'
-    url = urljoin(URL_TEMPLATE, butly_prefix)
 
     headers = {
         'Authorization': token,
@@ -22,19 +19,19 @@ def shorten_link(token, user_input):
         'long_url': user_input,
     }
 
-    response = requests.post(url, headers=headers, json=payload)
+    response = requests.post(URL_TEMPLATE, headers=headers, json=payload)
     response.raise_for_status()
 
     return response.json()['link']
 
 
-def count_clicks(token, link):
-    butly_prefix = 'v4/bitlinks/{0}/clicks/summary'
-    url = urljoin(URL_TEMPLATE, butly_prefix.format(link))
-
+def count_clicks(token, user_input):
+    link = urlparse(user_input)
+    butly_prefix = f'bit.ly/{link.path}/clicks/summary/'
+    url = urljoin(URL_TEMPLATE, butly_prefix)
     headers = {
         'Authorization': token,
-        'bitlink': link,
+        'bitlink': f'bit.ly/{link.path}',
     }
 
     response = requests.get(url, headers=headers)
@@ -46,9 +43,8 @@ def count_clicks(token, link):
 
 def is_bitlink(token, url):
     link = urlparse(url)
-    butly_prefix = f'/v4/bitlinks/{link.path}'
+    butly_prefix = f'bit.ly/{link.path}'
     url = urljoin(URL_TEMPLATE, butly_prefix)
-
     headers = {
         'Authorization': token,
     }
@@ -64,7 +60,6 @@ def main():
     token = os.getenv('API_TOKEN')
     try:
         response_status = is_bitlink(token, user_input)
-
         if response_status:
             return count_clicks(token, user_input)
 
