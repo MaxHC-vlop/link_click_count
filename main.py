@@ -27,8 +27,8 @@ def shorten_link(token, user_input):
 
 def count_clicks(token, user_input):
     link = urlparse(user_input)
-    butly_prefix = f'bit.ly/{link.path}/clicks/summary/'
-    url = urljoin(URL_TEMPLATE, butly_prefix)
+    url_prefix = f'bit.ly/{link.path}/clicks/summary/'
+    url = urljoin(URL_TEMPLATE, url_prefix)
     headers = {
         'Authorization': token,
         'bitlink': f'bit.ly/{link.path}',
@@ -43,8 +43,8 @@ def count_clicks(token, user_input):
 
 def is_bitlink(token, url):
     link = urlparse(url)
-    butly_prefix = f'bit.ly/{link.path}'
-    url = urljoin(URL_TEMPLATE, butly_prefix)
+    url_prefix = f'bit.ly/{link.path}'
+    url = urljoin(URL_TEMPLATE, url_prefix)
     headers = {
         'Authorization': token,
     }
