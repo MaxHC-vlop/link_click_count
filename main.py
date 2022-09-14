@@ -1,6 +1,6 @@
 import os
 
-from urllib.parse import urljoin, urlparse, urlsplit
+from urllib.parse import urljoin, urlparse
 
 import requests
 
@@ -57,7 +57,7 @@ def is_bitlink(token, url):
 def main():
     user_input = input('Enter link: ')
     load_dotenv()
-    token = os.getenv('BITLY_TOKEN')
+    token = os.environ.get('BITLY_TOKEN')
     try:
         response_status = is_bitlink(token, user_input)
         if response_status:
