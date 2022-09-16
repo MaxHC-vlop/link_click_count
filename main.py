@@ -1,4 +1,5 @@
 import os
+import logging
 
 from urllib.parse import urljoin, urlparse
 
@@ -26,7 +27,8 @@ def shorten_link(token, user_input):
 
 def count_clicks(token, user_input):
     link = urlparse(user_input)
-    url_prefix = f'bit.ly/{link.path}/clicks/summary/'
+    url = urljoin(link.netloc, link.path)
+    url_prefix = f'{link.netloc}{link.path}/clicks/summary/'
     url = urljoin(URL_TEMPLATE, url_prefix)
 
     headers = {
@@ -42,7 +44,7 @@ def count_clicks(token, user_input):
 
 def is_bitlink(token, url):
     link = urlparse(url)
-    url_prefix = f'bit.ly/{link.path}'
+    url_prefix = f'{link.netloc}{link.path}'
     url = urljoin(URL_TEMPLATE, url_prefix)
 
     headers = {
@@ -59,14 +61,14 @@ def main():
 
     load_dotenv()
     token = os.environ.get('BITLY_TOKEN')
-    
+    logging.basicConfig(format={} ,level=logging.INFO)
     try:
         response_status = is_bitlink(token, user_input)
         if response_status:
-            return count_clicks(token, user_input)
+            logging.info(count_clicks(token, user_input))
 
         else:
-            return shorten_link(token, user_input)
+            logging.info(shorten_link(token, user_input))
 
     except requests.exceptions.HTTPError as errh:
         exit("Can't get data from server:\n{0}".format(errh))
