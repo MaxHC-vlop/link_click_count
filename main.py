@@ -27,7 +27,6 @@ def shorten_link(token, user_input):
 
 def count_clicks(token, user_input):
     link = urlparse(user_input)
-    url = urljoin(link.netloc, link.path)
     url_prefix = f'{link.netloc}{link.path}/clicks/summary/'
     url = urljoin(URL_TEMPLATE, url_prefix)
 
@@ -61,6 +60,7 @@ def main():
 
     load_dotenv()
     token = os.environ.get('BITLY_TOKEN')
+    
     logging.basicConfig(format={} ,level=logging.INFO)
     try:
         response_status = is_bitlink(token, user_input)
