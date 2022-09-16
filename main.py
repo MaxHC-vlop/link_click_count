@@ -1,3 +1,4 @@
+import argparse
 import os
 import logging
 
@@ -11,12 +12,12 @@ from dotenv import load_dotenv
 URL_TEMPLATE = 'https://api-ssl.bitly.com/v4/bitlinks/'
 
 
-def shorten_link(token, user_input):
+def shorten_link(token, user_args):
     headers = {
         'Authorization': token,
     }
     payload = {
-        'long_url': user_input,
+        'long_url': user_args,
     }
 
     response = requests.post(URL_TEMPLATE, headers=headers, json=payload)
@@ -25,8 +26,8 @@ def shorten_link(token, user_input):
     return response.json()['link']
 
 
-def count_clicks(token, user_input):
-    link = urlparse(user_input)
+def count_clicks(token, user_args):
+    link = urlparse(user_args)
     url_prefix = f'{link.netloc}{link.path}/clicks/summary/'
     url = urljoin(URL_TEMPLATE, url_prefix)
 
@@ -56,19 +57,26 @@ def is_bitlink(token, url):
 
 
 def main():
-    user_input = input('Enter link: ')
+    parser = argparse.ArgumentParser(
+    description='Chek is bitlink'
+    )
+    parser.add_argument('link', type=str)
+
+    args = parser.parse_args()
+
+    user_args = args.link
 
     load_dotenv()
     token = os.environ.get('BITLY_TOKEN')
     
     logging.basicConfig(format={} ,level=logging.INFO)
     try:
-        response_status = is_bitlink(token, user_input)
+        response_status = is_bitlink(token, user_args)
         if response_status:
-            logging.info(count_clicks(token, user_input))
+            logging.info(count_clicks(token, user_args))
 
         else:
-            logging.info(shorten_link(token, user_input))
+            logging.info(shorten_link(token, user_args))
 
     except requests.exceptions.HTTPError as errh:
         exit("Can't get data from server:\n{0}".format(errh))
