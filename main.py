@@ -58,7 +58,7 @@ def is_bitlink(token, url):
 
 def main():
     parser = argparse.ArgumentParser(
-    description='Chek is bitlink'
+        description='Chek is bitlink'
     )
     parser.add_argument('link', type=str)
 
@@ -73,10 +73,10 @@ def main():
     try:
         response_status = is_bitlink(token, user_args)
         if response_status:
-            logging.info(count_clicks(token, user_args))
+            logging.info(f'Number of hits on the bitlink: {count_clicks(token, user_args)}')
 
         else:
-            logging.info(shorten_link(token, user_args))
+            logging.info(f'Your new bitlink: {shorten_link(token, user_args)}')
 
     except requests.exceptions.HTTPError as errh:
         exit("Can't get data from server:\n{0}".format(errh))

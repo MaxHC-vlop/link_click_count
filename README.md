@@ -35,14 +35,21 @@ Create `API_TOKEN` variable in `.env` file given by [bitly](https://bitly.com/a/
 API_TOKEN='SUPER_SECRET'
 ```
 
+Arguments :
+
+Main.py has one positional argument. You can give it a bitlink or a standard URL.
+
 ## Run
 
 ```bash
-python3.10 main.py
+python3.10 main.py https://bit.ly/your_bit
+# or
+python3.10 main.py https://google.com
 ```
 
 You will see :
 ```bash
-Enter link: (your_link)
-https://bit.ly/(abc)
+Number of hits on the bitlink: 0
+# or
+Your new bitlink: bit.ly/your_bit
 ```
