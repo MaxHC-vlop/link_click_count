@@ -30,8 +30,7 @@ def count_clicks(token, user_input):
     url = urljoin(URL_TEMPLATE, url_prefix)
 
     headers = {
-        'Authorization': token,
-        'bitlink': f'bit.ly/{link.path}',
+        'Authorization': token
     }
 
     response = requests.get(url, headers=headers)
@@ -78,4 +77,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
