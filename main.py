@@ -70,16 +70,16 @@ def main():
     logging.basicConfig(format={} ,level=logging.INFO)
     try:
         if is_bitlink(token, args.link):
-            logging.info(f'Number of hits on the bitlink: {count_clicks(token, user_args)}')
+            logging.info(f'Number of hits on the bitlink: {count_clicks(token, args.link)}')
 
         else:
-            logging.info(f'Your new bitlink: {shorten_link(token, user_args)}')
+            logging.info(f'Your new bitlink: {shorten_link(token, args.link)}')
 
     except requests.exceptions.HTTPError as errh:
-        exit("Can't get data from server:\n{0}".format(errh))
+        logging.error("Can't get data from server:\n{0}".format(errh))
 
     except requests.exceptions.ConnectionError as errc:
-        exit('Failed to connect to server:\n{0}'.format(errc))
+        logging.error('Failed to connect to server:\n{0}'.format(errc))
 
 
 if __name__ == '__main__':
