@@ -64,15 +64,12 @@ def main():
 
     args = parser.parse_args()
 
-    user_args = args.link
-
     load_dotenv()
     token = os.environ.get('BITLY_TOKEN')
     
     logging.basicConfig(format={} ,level=logging.INFO)
     try:
-        response_status = is_bitlink(token, user_args)
-        if response_status:
+        if is_bitlink(token, args.link):
             logging.info(f'Number of hits on the bitlink: {count_clicks(token, user_args)}')
 
         else:
