@@ -1,4 +1,5 @@
 import argparse
+from cmath import exp
 import os
 import logging
 
@@ -75,11 +76,8 @@ def main():
         else:
             logging.info(f'Your new bitlink: {shorten_link(token, args.link)}')
 
-    except requests.exceptions.HTTPError as errh:
-        logging.error("Can't get data from server:\n{0}".format(errh))
-
-    except requests.exceptions.ConnectionError as errc:
-        logging.error('Failed to connect to server:\n{0}'.format(errc))
+    except Exception as err:
+        logging.exception(err)
 
 
 if __name__ == '__main__':
