@@ -77,7 +77,7 @@ def main():
             logging.info(f'Your new bitlink: {shorten_link(token, args.link)}')
 
     except requests.exceptions.HTTPError as error:
-            logging.error(f" HTTPError in: {args.link}: {error}")
+            logging.exception(f" HTTPError in: {args.link}: {error}")
 
 
 if __name__ == '__main__':
